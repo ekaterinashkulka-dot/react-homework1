@@ -1,7 +1,6 @@
 import "./App.css";
 import Welcome from "./NewComponents/Welcome";
 import About from "./NewComponents/About";
-import { useState } from "react";
 import CounterComponents from "./CounterComponents";
 import ListComponent from "./listComponent";
 
