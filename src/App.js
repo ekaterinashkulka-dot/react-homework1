@@ -4,7 +4,7 @@ import About from "./NewComponents/About";
 import CounterComponents from "./CounterComponents";
 import ListComponent from "./listComponent";
 import RenderComponent from "./RenderComponent";
-import TodoList from "./TodoList";
+import TodoList from "./TodoHomework/TodoList";
 
 function App() {
   return (
