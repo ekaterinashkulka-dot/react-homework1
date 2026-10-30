@@ -1,58 +1,91 @@
-import { useState } from "react";
+import { Component } from "react";
 import TodoItems from "./TodoItems";
 
-const TodoList = () => {
-  const [input, setInput] = useState("");
-  const [item, setItem] = useState([
-    { id: 1, name: "first" },
-    { id: 2, name: "second" },
-    { id: 3, name: "third" },
-    { id: 4, name: "fourth" },
-  ]);
-  const [nextId, setNextId] = useState(5);
+class TodoList extends Component {
+  state = {
+    input: "",
+    item: [],
+    nextId: 5,
+  };
 
-  const onClickHandler = () => {
+  componentDidMount() {
+    console.log("TodoList mounted");
+    const savedTodos = localStorage.getItem("todos");
+    console.log(savedTodos);
+    if (savedTodos) {
+      const parsedTodos = JSON.parse(savedTodos);
+
+      const maxId = Math.max(0, ...parsedTodos.map((task) => task.id));
+
+      this.setState({
+        item: parsedTodos,
+        nextId: maxId + 1,
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.item !== this.state.item) {
+      if (this.state.item.length === 0) {
+        localStorage.removeItem("todos");
+      } else {
+        localStorage.setItem("todos", JSON.stringify(this.state.item));
+      }
+    }
+  }
+
+  onClickHandler = () => {
     const newTask = {
-      id: nextId,
-      name: input,
+      id: this.state.nextId,
+      name: this.state.input,
     };
-    setNextId((prevId) => prevId + 1);
-    const updatedItems = [...item, newTask];
-    setItem(updatedItems);
-    setInput("");
+    this.setState((prevState) => ({
+      nextId: prevState.nextId + 1,
+      item: [...prevState.item, newTask],
+      input: "",
+    }));
   };
 
-  const dleteTask = (id) => {
-    const updatedItems = item.filter((task) => task.id !== id);
-    setItem(updatedItems);
+  deleteTask = (id) => {
+    const updatedItems = this.state.item.filter((task) => task.id !== id);
+    this.setState({ item: updatedItems });
   };
 
-  const onChangeHandler = (e) => {
+  clearTodoList = () => {
+    this.setState({
+      item: [],
+    });
+  };
+
+  onChangeHandler = (e) => {
     const value = e.target.value;
-    setInput(value);
+    this.setState({ input: value });
   };
 
-  const onKeyDown = (e) => {
+  onKeyDown = (e) => {
     if (e.key === "Enter") {
-      onClickHandler();
+      this.onClickHandler();
     }
   };
 
-  return (
-    <>
-      <input
-        placeholder="New task"
-        onChange={onChangeHandler}
-        value={input}
-        onKeyDown={onKeyDown}
-      />
-      <p>Tasks: {item.length}</p>
+  render() {
+    return (
+      <>
+        <input
+          placeholder="New task"
+          onChange={this.onChangeHandler}
+          value={this.state.input}
+          onKeyDown={this.onKeyDown}
+        />
+        <p>Tasks: {this.state.item.length}</p>
 
-      <TodoItems tasks={item} onDelete={dleteTask} />
+        <TodoItems tasks={this.state.item} onDelete={this.deleteTask} />
 
-      <button onClick={onClickHandler}>Add TO DO</button>
-    </>
-  );
-};
+        <button onClick={this.onClickHandler}>Add TO DO</button>
+        <button onClick={this.clearTodoList}>Clear Todo List</button>
+      </>
+    );
+  }
+}
 
 export default TodoList;
