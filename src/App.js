@@ -6,6 +6,11 @@ import ListComponent from "./listComponent";
 import RenderComponent from "./RenderComponent";
 import TodoList from "./TodoHomework/TodoList";
 import MyClassComponent from "./MyClassComponent";
+import Counter from "./homework/Counter";
+import Effect from "./homework/EffectExampke";
+import Layout from "./homework/LayoutEffect";
+import Random from "./homework/RandomName";
+import ReduceComponent from "./homework/ReduceExample";
 import { useState } from "react";
 
 function App() {
@@ -22,6 +27,11 @@ function App() {
           Show timer
         </button> */}
         <TodoList />
+        {/* <Counter /> */}
+        {/* <Effect /> */}
+        {/* <Layout /> */}
+        {/* <Random /> */}
+        {/* <ReduceComponent /> */}
       </header>
     </div>
   );
